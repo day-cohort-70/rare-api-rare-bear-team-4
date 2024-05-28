@@ -44,12 +44,12 @@ def get_all_posts(url):
         if "_expand" in url["query_params"]:
             for item in url["query_params"]["_expand"]:
 
-                if item == "categories":
+                if item == "category":
                     post["category"] = {
                         "categoryId": row["category_id"],
                         "categoryLabel": row["category_label"]
                     }
-                if item == "users":
+                if item == "user":
                     post["user"] = {
                         "userId": row["user_id"],
                         "userFirstName": row["first_name"],
