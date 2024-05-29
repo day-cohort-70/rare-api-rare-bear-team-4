@@ -100,5 +100,15 @@ VALUES (1, 2, 'Sample Post Title', '2024-05-28', 'https://example.com/sample-ima
 INSERT INTO Categories (label)
 VALUES ('Sample Category');
 
+INSERT INTO Categories (label)
+VALUES ('Technology');
+
+
 INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
 VALUES ('John', 'Doe', 'john.doe@example.com', 'A brief bio about John Doe.', 'johndoe', 'password123', 'https://example.com/profile-image.jpg', '2024-05-28', 1);
+
+INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+VALUES (3, 1, 'Exciting News in Tech', '2024-05-29', 'https://example.com/tech-news.jpg', 'This is an exciting update about the latest in technology.', 1);
+
+INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+VALUES (2, 3, 'Upcoming Events', '2024-06-01', 'https://example.com/upcoming-events.jpg', 'Here is a list of upcoming events you might be interested in.', 0);
