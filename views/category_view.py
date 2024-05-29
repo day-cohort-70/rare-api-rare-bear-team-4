@@ -2,18 +2,16 @@ import sqlite3
 import json
 
 def update_categories(id, Categories_data):
-    with sqlite3.connect("./Categories.db") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute(
             """
             UPDATE Categories
-                SET
-                    name = ?,
-                    hauler_id = ?
-            WHERE id = ?
+            SET label =?
+            WHERE id =?
             """,
-            (Categories_data['name'], Categories_data['hauler_id'], id)
+            (Categories_data['label'], id)
         )
 
         rows_affected = db_cursor.rowcount
@@ -21,7 +19,7 @@ def update_categories(id, Categories_data):
     return True if rows_affected > 0 else False
 
 def delete_categories(pk):
-    with sqlite3.connect("./Categories.db") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -37,7 +35,7 @@ def delete_categories(pk):
 
 def list_categories():
     # Open a connection to the database
-    with sqlite3.connect("./Categories.db") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -45,8 +43,7 @@ def list_categories():
         db_cursor.execute("""
         SELECT
             s.id,
-            s.name,
-            s.hauler_id
+            s.label
         FROM Categories s
         """)
         query_results = db_cursor.fetchall()
@@ -63,7 +60,7 @@ def list_categories():
 
 def retrieve_categories(pk):
     # Open a connection to the database
-    with sqlite3.connect("./Categories.db") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -71,8 +68,7 @@ def retrieve_categories(pk):
         db_cursor.execute("""
         SELECT
             s.id,
-            s.name,
-            s.hauler_id
+            s.label
         FROM Categories s
         WHERE s.id = ?
         """, (pk,))
@@ -80,30 +76,26 @@ def retrieve_categories(pk):
 
         # Serialize Python list to JSON encoded string
         dictionary_version_of_object = dict(query_results)
-        serialized_Categories = json.dumps(dictionary_version_of_object)
+        serialized_categories = json.dumps(dictionary_version_of_object)
 
-    return serialized_Categories
+    return serialized_categories
 
-def post_categories(Categories_data):
-    with sqlite3.connect("./Categories.db") as conn:
+def post_categories(label):
+    with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute(
             """
             INSERT INTO Categories
-            (name, hauler_id)
-                VALUES(
-                    ?,
-                    ?)
+            (label) VALUES(?)
             """,
-            (Categories_data['name'], Categories_data['hauler_id'])
+            (label)
         )
-        new_Categories_id = db_cursor.lastrowid
+        new_categories_id = db_cursor.lastrowid
 
     conn.commit()
     ## Select and return using cursor.lastrow
     return json.dumps({
-            'id': new_Categories_id,
-            'name': Categories_data['name'],
-            'hauler_id': Categories_data['hauler_id']
+            'id': new_categories_id,
+            'label': label
         })

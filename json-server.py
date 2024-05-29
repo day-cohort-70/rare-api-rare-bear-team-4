@@ -8,7 +8,7 @@ from views import list_categories, retrieve_categories, delete_categories, updat
 
 
 class JSONServer(HandleRequests):
-    """Server class to handle incoming HTTP requests for categoryping categories"""
+    """Server class to handle incoming HTTP requests"""
 
     def do_GET(self):
         """Handle GET requests from a client"""
@@ -68,7 +68,7 @@ class JSONServer(HandleRequests):
         request_body = json.loads(request_body)
 
         if url["requested_resource"] == "categories":
-            successfully_posted = post_categories(request_body)
+            successfully_posted = post_categories(request_body['label'])
             if successfully_posted:
                 return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
 
