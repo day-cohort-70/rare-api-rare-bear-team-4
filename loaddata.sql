@@ -102,3 +102,10 @@ VALUES ('Sample Category');
 
 INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
 VALUES ('John', 'Doe', 'john.doe@example.com', 'A brief bio about John Doe.', 'johndoe', 'password123', 'https://example.com/profile-image.jpg', '2024-05-28', 1);
+
+INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+VALUES (3, 1, 'Exciting News in Tech', '2024-05-29', 'https://example.com/tech-news.jpg', 'This is an exciting update about the latest in technology.', 1);
+INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+VALUES (2, 4, 'Upcoming Events', '2024-06-01', 'https://example.com/upcoming-events.jpg', 'Here is a list of upcoming events you might be interested in.', 0);
+INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+VALUES (1, 2, 'Innovative Startup Ideas', '2024-05-30', 'https://example.com/startup-ideas.jpg', 'Exploring the most innovative startup ideas that are disrupting the market.', 1);
