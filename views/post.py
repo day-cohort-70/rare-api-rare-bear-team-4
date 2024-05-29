@@ -1,6 +1,7 @@
 import sqlite3
 import json
 
+
 def get_all_posts(url):
     with sqlite3.connect("db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -38,7 +39,7 @@ def get_all_posts(url):
             "title": row["title"],
             "publicationDate": row["publication_date"],
             "content": row["content"],
-            "approved": row["approved"]
+            "approved": row["approved"],
         }
 
         if "_expand" in url["query_params"]:
@@ -47,18 +48,72 @@ def get_all_posts(url):
                 if item == "category":
                     post["category"] = {
                         "categoryId": row["category_id"],
-                        "categoryLabel": row["category_label"]
+                        "categoryLabel": row["category_label"],
                     }
                 if item == "user":
                     post["user"] = {
                         "userId": row["user_id"],
                         "userFirstName": row["first_name"],
-                        "userLastName": row["last_name"]
+                        "userLastName": row["last_name"],
                     }
 
         posts.append(post)
 
     return json.dumps(posts)
 
+
 def get_one_post(pk):
     return "bubkis"
+
+
+def delete_post(pk):
+    with sqlite3.connect("db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        DELETE FROM Posts WHERE id = ?
+        """,
+            (pk,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+    return True if number_of_rows_deleted > 0 else False
+
+
+def update_post(id, post_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Posts
+                SET
+                    user_id = ?,
+                    category_id = ?,
+                    title = ?,
+                    publication_date = ?,
+                    image_url = ?,
+                    content = ?,
+                    approved = ?,
+                    id = ?
+            WHERE id = ?
+            """,
+            (
+                post_data["user_id"],
+                post_data["category_id"],
+                post_data["title"],
+                post_data["publication_date"],
+                post_data["image_url"],
+                post_data["content"],
+                post_data["approved"],
+                id,
+                id,
+            ),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return rows_affected > 0
