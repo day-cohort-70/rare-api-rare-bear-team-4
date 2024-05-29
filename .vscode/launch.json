@@ -9,7 +9,6 @@
             "type": "python",
             "request": "launch",
             "program": "json-server.py",
-            "justMyCode": true,
             "console": "integratedTerminal"
         }
     ]

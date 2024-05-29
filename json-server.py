@@ -6,7 +6,7 @@ from nss_handler import HandleRequests, status
 # Add your imports below this line
 from views import list_tags, retrieve_tag
 from views import create_user, login_user
-
+from views import get_all_posts, get_one_post
 
 class JSONServer(HandleRequests):
     """Server class to handle incoming HTTP requests for rare"""
@@ -25,9 +25,18 @@ class JSONServer(HandleRequests):
             response_body = list_tags()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
         
+
+        if url["requested_resource"] == "posts":
+            if url["pk"] != 0:
+                response_body = get_one_post(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+            response_body = get_all_posts(url)
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
         else:
             return self.response("", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
-
+        
     def do_PUT(self):
         url = self.parse_url(self.path)
         pk = url["pk"]
