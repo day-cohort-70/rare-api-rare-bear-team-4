@@ -2,8 +2,10 @@ import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
 
+
 # Add your imports below this line
 from views import list_tags, retrieve_tag
+from views import create_user, login_user
 
 
 class JSONServer(HandleRequests):
@@ -25,13 +27,34 @@ class JSONServer(HandleRequests):
         
         else:
             return self.response("", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
-        
-    # def do_PUT(self):
- 
-    # def do_DELETE(self):
-       
-    # def do_POST(self):
-       
+
+    def do_PUT(self):
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+        # Get the request body JSON for the new data
+        content_len = int(self.headers.get("content-length", 0))
+        request_body = self.rfile.read(content_len)
+        request_body = json.loads(request_body)
+
+    def do_DELETE(self):
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+    def do_POST(self):
+        url = self.parse_url(self.path)
+        content_len = int(self.headers.get("content-length", 0))
+        request_body = self.rfile.read(content_len)
+        request_body = json.loads(request_body)
+
+        if url["requested_resource"] == "login":
+            response = login_user(request_body)
+        elif url["requested_resource"] == "register":
+            response = create_user(request_body)
+        else:
+            response = json.dumps({"valid": False, "message": "Invalid endpoint"})
+
+        self.response(response, status.HTTP_200_SUCCESS.value)
 
 
 #
