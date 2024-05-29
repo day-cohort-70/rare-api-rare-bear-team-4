@@ -88,6 +88,10 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+INSERT INTO "Users" 
+  ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active") 
+VALUES 
+  ('novo', 'novo', 'novo@novo.com', 'A short bio about novo.', 'novo', 'novo', 'https://www.desertusa.com/dusablog/wp-content/uploads/jackrabbit-has-long-ears.jpg', '2023-05-20', 1);
 
 
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
