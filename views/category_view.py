@@ -89,7 +89,7 @@ def post_categories(label):
             INSERT INTO Categories
             (label) VALUES(?)
             """,
-            (label)
+            (label,)
         )
         new_categories_id = db_cursor.lastrowid
 
