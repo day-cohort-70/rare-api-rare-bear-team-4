@@ -25,8 +25,6 @@ class JSONServer(HandleRequests):
             response_body = list_tags()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
         
-        else:
-            return self.response("", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
 
         if url["requested_resource"] == "posts":
             if url["pk"] != 0:
@@ -36,6 +34,9 @@ class JSONServer(HandleRequests):
             response_body = get_all_posts(url)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+        else:
+            return self.response("", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
+        
     def do_PUT(self):
         url = self.parse_url(self.path)
         pk = url["pk"]

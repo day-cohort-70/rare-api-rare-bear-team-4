@@ -60,5 +60,5 @@ def get_all_posts(url):
 
     return json.dumps(posts)
 
-def get_one_post():
+def get_one_post(pk):
     return "bubkis"
