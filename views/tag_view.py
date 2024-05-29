@@ -37,7 +37,7 @@ def retrieve_tag(pk):
         SELECT
             t.id,
             t.label,
-        FROM Tag t
+        FROM Tags t
         WHERE t.id = ?
         """, (pk,))
         query_results = db_cursor.fetchone()
