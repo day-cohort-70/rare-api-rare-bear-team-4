@@ -6,7 +6,7 @@ from nss_handler import HandleRequests, status
 # Add your imports below this line
 from views import list_tags, retrieve_tag
 from views import create_user, login_user
-from views import get_all_posts, get_one_post, delete_post, update_post
+from views import get_all_posts, get_one_post, delete_post, update_post, post_post
 from views import (
     list_categories,
     retrieve_categories,
@@ -119,12 +119,22 @@ class JSONServer(HandleRequests):
 
         if url["requested_resource"] == "login":
             response = login_user(request_body)
+
         elif url["requested_resource"] == "register":
             response = create_user(request_body)
+
         elif url["requested_resource"] == "categories":
             successfully_posted = post_categories(request_body["label"])
             if successfully_posted:
                 return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
+
+        elif url["requested_resource"] == "posts":
+            new_post_id = post_post(request_body)
+            if new_post_id is not None:
+                # Return the new ship's ID in the response
+                return self.response(
+                    {"id": new_post_id}, status.HTTP_201_SUCCESS_CREATED.value
+                )
         else:
             response = json.dumps({"valid": False, "message": "Invalid endpoint"})
 
