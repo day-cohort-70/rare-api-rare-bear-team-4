@@ -159,7 +159,7 @@ class JSONServer(HandleRequests):
             new_post_id = post_post(request_body)
             if new_post_id is not None:
                 # Return the new ship's ID in the response
-                response_body = json.dumps({"dictionary": new_post_id})
+                response_body = json.dumps({"new post id": new_post_id})
                 return self.response(
                     response_body, status.HTTP_201_SUCCESS_CREATED.value
                 )
