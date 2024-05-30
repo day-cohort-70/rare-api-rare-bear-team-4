@@ -5,7 +5,7 @@ from nss_handler import HandleRequests, status
 
 # Add your imports below this line
 from views import list_tags, retrieve_tag, update_tag, delete_tag, make_tag
-from views import create_user, login_user
+from views import create_user, login_user, update_user, delete_user, retrieve_user, list_users
 from views import get_all_posts, get_one_post, delete_post, update_post, post_post
 from views import (
     list_categories,
@@ -48,6 +48,14 @@ class JSONServer(HandleRequests):
 
             response_body = list_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+        
+        elif url["requested_resource"] == "users":
+            if url["pk"] != 0:
+                response_body = retrieve_user(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+            response_body = list_users()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:
             return self.response(
@@ -86,6 +94,15 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     )
+                
+        elif url["requested_resource"] == "users":
+            if pk != 0:
+                successfully_updated = update_user(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+                
         return self.response(
             "Requested resource not found",
             status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
@@ -125,6 +142,18 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "tags":
             if pk != 0:
                 successfully_deleted = delete_tag(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+            
+        elif url["requested_resource"] == "users":
+            if pk != 0:
+                successfully_deleted = delete_user(pk)
                 if successfully_deleted:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
