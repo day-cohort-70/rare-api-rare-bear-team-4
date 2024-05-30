@@ -109,37 +109,7 @@ VALUES ('John', 'Doe', 'john.doe@example.com', 'A brief bio about John Doe.', 'j
 
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
 VALUES (3, 1, 'Exciting News in Tech', '2024-05-29', 'https://example.com/tech-news.jpg', 'This is an exciting update about the latest in technology.', 1);
-
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
-VALUES (2, 3, 'Upcoming Events', '2024-06-01', 'https://example.com/upcoming-events.jpg', 'Here is a list of upcoming events you might be interested in.', 0);
-
+VALUES (2, 4, 'Upcoming Events', '2024-06-01', 'https://example.com/upcoming-events.jpg', 'Here is a list of upcoming events you might be interested in.', 0);
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
 VALUES (1, 2, 'Innovative Startup Ideas', '2024-05-30', 'https://example.com/startup-ideas.jpg', 'Exploring the most innovative startup ideas that are disrupting the market.', 1);
-
-
-        SELECT
-            p.id,
-            p.user_id,
-            p.category_id,
-            p.title,
-            p.publication_date,
-            p.content,
-            p.approved,
-            ct.id category_id,
-            ct.label category_label,
-            u.id user_id,
-            u.first_name,
-            u.last_name
-        FROM Posts p
-        LEFT JOIN Categories ct ON ct.id = p.category_id
-        JOIN Users u ON u.id = p.user_id;
-
-        SELECT * FROM Posts;
-
-        SELECT * FROM Users;
-
-        SELECT * FROM Categories
-
-UPDATE Posts
-SET category_id = 4
-WHERE id = 3
