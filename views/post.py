@@ -14,6 +14,7 @@ def get_all_posts(url):
             p.category_id,
             p.title,
             p.publication_date,
+            p.image_url,
             p.content,
             p.approved,
             ct.id category_id,
@@ -38,6 +39,7 @@ def get_all_posts(url):
             "categoryId": row["category_id"],
             "title": row["title"],
             "publicationDate": row["publication_date"],
+            "imageUrl": row["image_url"],
             "content": row["content"],
             "approved": row["approved"],
         }
@@ -117,3 +119,28 @@ def update_post(id, post_data):
         rows_affected = db_cursor.rowcount
 
     return rows_affected > 0
+
+
+def post_post(post_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                post_data["user_id"],
+                post_data["category_id"],
+                post_data["title"],
+                post_data["publication_date"],
+                post_data["image_url"],
+                post_data["content"],
+                post_data["approved"],
+            ),
+        )
+
+        new_post_id = db_cursor.lastrowid
+
+    return new_post_id
