@@ -14,6 +14,7 @@ from views import (
     update_categories,
     post_categories,
 )
+from views import post_post_tag
 
 
 class JSONServer(HandleRequests):
@@ -198,6 +199,20 @@ class JSONServer(HandleRequests):
                 return self.response(
                     response_body, status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value
                 )
+        elif url["requested_resource"] == "post-tags":
+            new_post_tag_id = post_post_tag(request_body)
+            if new_post_tag_id is not None:
+                # Return the new post_tag's ID in the response
+                response_body = json.dumps({"new post_tag id": new_post_tag_id})
+                return self.response(
+                    response_body, status.HTTP_201_SUCCESS_CREATED.value
+                )
+            else:
+                # Handle the case where the post creation failed
+                response_body = json.dumps({"error": "Failed to create post"})
+                return self.response(
+                    response_body, status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value
+                )            
         else:
             response = json.dumps({"valid": False, "message": "Invalid endpoint"})
 
