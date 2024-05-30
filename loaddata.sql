@@ -100,6 +100,10 @@ VALUES (1, 2, 'Sample Post Title', '2024-05-28', 'https://example.com/sample-ima
 INSERT INTO Categories (label)
 VALUES ('Sample Category');
 
+INSERT INTO Categories (label)
+VALUES ('Technology');
+
+
 INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
 VALUES ('John', 'Doe', 'john.doe@example.com', 'A brief bio about John Doe.', 'johndoe', 'password123', 'https://example.com/profile-image.jpg', '2024-05-28', 1);
 
