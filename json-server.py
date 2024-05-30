@@ -159,8 +159,15 @@ class JSONServer(HandleRequests):
             new_post_id = post_post(request_body)
             if new_post_id is not None:
                 # Return the new ship's ID in the response
+                response_body = json.dumps({"dictionary": new_post_id})
                 return self.response(
-                    {"id": new_post_id}, status.HTTP_201_SUCCESS_CREATED.value
+                    response_body, status.HTTP_201_SUCCESS_CREATED.value
+                )
+            else:
+                # Handle the case where the post creation failed
+                response_body = json.dumps({"error": "Failed to create post"})
+                return self.response(
+                    response_body, status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value
                 )
         else:
             response = json.dumps({"valid": False, "message": "Invalid endpoint"})
