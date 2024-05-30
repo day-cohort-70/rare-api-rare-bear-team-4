@@ -27,7 +27,15 @@ def get_all_posts(url):
         JOIN Users u ON u.id = p.user_id
         """
 
-        cursor.execute(query)
+        params = []
+
+        if "userId" in url["query_params"]:
+            query += " WHERE p.user_id = ?"
+            user_id = url["query_params"]["userId"][0]
+            params.append(user_id)
+
+        # Execute the query with the parameters
+        cursor.execute(query, params)
         query_results = cursor.fetchall()
 
     posts = []
