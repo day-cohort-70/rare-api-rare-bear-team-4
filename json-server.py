@@ -178,7 +178,7 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "categories":
             successfully_posted = post_categories(request_body["label"])
             if successfully_posted:
-                return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
+                return self.response(successfully_posted, status.HTTP_201_SUCCESS_CREATED.value)
         elif url["requested_resource"] == "tags":
             successfully_posted = make_tag(request_body["label"])
             if successfully_posted:
