@@ -106,4 +106,7 @@ def post_categories(label):
 
     conn.commit()
     ## Select and return using cursor.lastrow
-    return json.dumps({"id": new_categories_id, "label": label})
+    return json.dumps({
+        'id': new_categories_id,
+        'label': label
+        })
