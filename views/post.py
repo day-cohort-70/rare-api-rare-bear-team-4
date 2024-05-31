@@ -23,8 +23,8 @@ def get_all_posts(url):
             u.first_name,
             u.last_name
         FROM Posts p
-        JOIN Categories ct ON ct.id = p.category_id
-        JOIN Users u ON u.id = p.user_id
+        LEFT JOIN Categories ct ON ct.id = p.category_id
+        LEFT JOIN Users u ON u.id = p.user_id
         """
 
         params = []
@@ -73,7 +73,28 @@ def get_all_posts(url):
 
 
 def get_one_post(pk):
-    return "bubkis"
+    # Open a connection to the database
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        SELECT
+            *
+        FROM Posts
+        WHERE id = ?
+        """,
+            (pk,),
+        )
+        query_results = db_cursor.fetchone()
+
+        # Serialize Python list to JSON encoded string
+        dictionary_version_of_object = dict(query_results)
+        serialized_posts = json.dumps(dictionary_version_of_object)
+
+    return serialized_posts
 
 
 def delete_post(pk):

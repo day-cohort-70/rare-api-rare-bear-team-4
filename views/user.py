@@ -160,8 +160,8 @@ def retrieve_user(pk):
             """
         SELECT
             *
-        FROM Users s
-        WHERE s.id = ?
+        FROM Users
+        WHERE id = ?
         """,
             (pk,),
         )
