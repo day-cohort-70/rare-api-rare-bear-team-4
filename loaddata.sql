@@ -113,3 +113,60 @@ INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, con
 VALUES (2, 4, 'Upcoming Events', '2024-06-01', 'https://example.com/upcoming-events.jpg', 'Here is a list of upcoming events you might be interested in.', 0);
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
 VALUES (1, 2, 'Innovative Startup Ideas', '2024-05-30', 'https://example.com/startup-ideas.jpg', 'Exploring the most innovative startup ideas that are disrupting the market.', 1);
+
+
+
+
+async function deletePost(postId) {
+    const url = `http://localhost:8088/posts/${postId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            console.log(`Post with ID ${postId} has been successfully deleted.`);
+        } else {
+            console.error(`Failed to delete post with ID ${postId}. Status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error(`Error occurred while deleting post with ID ${postId}:`, error);
+    }
+}
+
+
+async function updatePost(postId, postData) {
+    const url = `http://localhost:8088/posts/${postId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData)
+        });
+
+        if (response.ok) {
+            const updatedPost = await response.json();
+            console.log(`Post with ID ${postId} has been successfully updated.`, updatedPost);
+        } else {
+            console.error(`Failed to update post with ID ${postId}. Status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error(`Error occurred while updating post with ID ${postId}:`, error);
+    }
+}
+
+
+
+
+
+
+const handlePostUpdate = (postId, postData) => {
+    updatePost(postId, postData)
+}

@@ -82,9 +82,16 @@ def get_one_post(pk):
         db_cursor.execute(
             """
         SELECT
-            *
-        FROM Posts
-        WHERE id = ?
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.image_url,
+            p.content,
+            p.approved
+        FROM Posts p
+        WHERE p.id = ?
         """,
             (pk,),
         )
