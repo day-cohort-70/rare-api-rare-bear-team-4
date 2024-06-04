@@ -21,7 +21,7 @@ from views import (
     update_categories,
     post_categories,
 )
-from views import post_post_tag
+from views import post_post_tag, get_one_post_tag
 
 
 class JSONServer(HandleRequests):
@@ -64,6 +64,14 @@ class JSONServer(HandleRequests):
 
             response_body = list_users()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+        
+        elif url["requested_resource"] == "post-tags":
+            if url["pk"] != 0:
+                response_body = get_one_post_tag(url)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+            
+            response_body = "not set up yet"
+            return self.response(response_body, status.HTTP_500_SERVER_ERROR.value)
 
         else:
             return self.response(
