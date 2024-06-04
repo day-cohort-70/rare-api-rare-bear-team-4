@@ -8,3 +8,10 @@ from .category_view import (
     update_categories,
     post_categories,
 )
+from .comment_view import (
+    update_comment,
+    retrieve_comments,
+    retrieve_comments_by_post_id,
+    post_comment,
+    delete_comment
+)
