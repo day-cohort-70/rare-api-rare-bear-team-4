@@ -55,11 +55,15 @@ def retrieve_comments():
         """,
             (),
         )
-        query_results = db_cursor.fetchone()
+        query_results = db_cursor.fetchall()
+
+        # Convert each row to a dictionary and append to a list
+        comments_list = []
+        for row in query_results:
+            comments_list.append(dict(row))
 
         # Serialize Python list to JSON encoded string
-        dictionary_version_of_object = dict(query_results)
-        serialized_comments = json.dumps(dictionary_version_of_object)
+        serialized_comments = json.dumps(comments_list)
 
     return serialized_comments
 
@@ -73,20 +77,24 @@ def retrieve_comments_by_post_id(post_id):
         db_cursor.execute(
             """
         SELECT
-            id,
-            author_id,
-            post_id,
-            content
-        FROM Comments
-        WHERE post_id = ?
+            p.id,
+            p.author_id,
+            p.post_id,
+            p.content
+        FROM Comments p
+        WHERE p.post_id = ?
         """,
             (post_id,),
         )
-        query_results = db_cursor.fetchone()
+        query_results = db_cursor.fetchall()
+
+        # Convert each row to a dictionary and append to a list
+        comments_list = []
+        for row in query_results:
+            comments_list.append(dict(row))
 
         # Serialize Python list to JSON encoded string
-        dictionary_version_of_object = dict(query_results)
-        serialized_comments = json.dumps(dictionary_version_of_object)
+        serialized_comments = json.dumps(comments_list)
 
     return serialized_comments
 
