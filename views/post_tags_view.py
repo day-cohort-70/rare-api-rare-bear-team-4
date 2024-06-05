@@ -82,3 +82,17 @@ def get_all_post_tags():
             post_tags.append(dict(row))
 
     return json.dumps(post_tags)
+
+def delete_post_tag(pk):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute(""" 
+            DELETE from PostTags
+                WHERE id = ?
+        """, (pk,))
+
+        number_of_rows_deleted = cursor.rowcount
+
+    return True if number_of_rows_deleted > 0 else False

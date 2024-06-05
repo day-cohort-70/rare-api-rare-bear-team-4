@@ -8,4 +8,4 @@ from .category_view import (
     update_categories,
     post_categories,
 )
-from .post_tags_view import post_post_tag, get_one_post_tag, get_all_post_tags
+from .post_tags_view import post_post_tag, get_one_post_tag, get_all_post_tags, delete_post_tag

@@ -21,7 +21,7 @@ from views import (
     update_categories,
     post_categories,
 )
-from views import post_post_tag, get_one_post_tag, get_all_post_tags
+from views import post_post_tag, get_one_post_tag, get_all_post_tags, delete_post_tag
 
 
 class JSONServer(HandleRequests):
@@ -178,6 +178,11 @@ class JSONServer(HandleRequests):
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
                 )
+        elif url["requested_resource"] == "post-tags":
+            success = delete_post_tag(pk)
+            if success:
+                return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
+            return self.response("Requested Resource not Found", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
 
     def do_POST(self):
         url = self.parse_url(self.path)
