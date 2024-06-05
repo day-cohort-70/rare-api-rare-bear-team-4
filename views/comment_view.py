@@ -105,9 +105,10 @@ def post_comment(comment_data):
         db_cursor.execute(
             """
             INSERT INTO Comments
-            (author_id, post_id, content) VALUES(?, ?, ?)
+            (author_id, post_id, content, subject, creation_date) 
+            VALUES(?, ?, ?, ?, ?)
             """,
-            (comment_data["author_id"], comment_data["post_id"], comment_data["content"]),
+            (comment_data["author_id"], comment_data["post_id"], comment_data["content"], comment_data["subject"], comment_data["creation_date"]),
         )
         new_comment_id = db_cursor.lastrowid
 
@@ -117,5 +118,7 @@ def post_comment(comment_data):
         'id': new_comment_id,
         'author_id': comment_data["author_id"],
         'post_id': comment_data["post_id"],
-        'content': comment_data["content"]
+        'content': comment_data["content"],
+        'subject': comment_data["subject"],
+        'creation_date': comment_data["creation_date"]
         })

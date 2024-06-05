@@ -40,6 +40,12 @@ class JSONServer(HandleRequests):
         response_body = ""
         url = self.parse_url(self.path)
 
+        if (("/comments" in self.path) & (url["requested_resource"] == "posts")):
+            # Extract postId from the path
+            postid = self.path.split("/")[2]  # Adjust index based on your URL structure
+            response_body = retrieve_comments_by_post_id(postid)
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
         if url["requested_resource"] == "tags":
             if url["pk"] != 0:
                 response_body = retrieve_tag(url["pk"])
