@@ -21,7 +21,7 @@ from views import (
     update_categories,
     post_categories,
 )
-from views import post_post_tag, get_one_post_tag
+from views import post_post_tag, get_post_tags, delete_post_tag
 from views import (
     update_comment,
     retrieve_comment,
@@ -79,12 +79,8 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
         
         elif url["requested_resource"] == "post-tags":
-            if url["pk"] != 0:
-                response_body = get_one_post_tag(url)
+                response_body = get_post_tags(url)
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
-            
-            response_body = "not set up yet"
-            return self.response(response_body, status.HTTP_500_SERVER_ERROR.value)
         
         elif url["requested_resource"] == "comments":
             if url["pk"] != 0:
@@ -211,6 +207,11 @@ class JSONServer(HandleRequests):
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
                 )
+        elif url["requested_resource"] == "post-tags":
+            success = delete_post_tag(pk)
+            if success:
+                return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
+            return self.response("Requested Resource not Found", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
             
         elif url["requested_resource"] == "comments":
             if pk != 0:
