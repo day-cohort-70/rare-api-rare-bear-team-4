@@ -58,7 +58,7 @@ def update_tag(id, tags_data):
             SET label =?
             WHERE id =?
             """,
-            (tags_data['label'], id)
+            (tags_data["label"], id),
         )
 
         rows_affected = db_cursor.rowcount
