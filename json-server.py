@@ -24,7 +24,7 @@ from views import (
 from views import post_post_tag, get_one_post_tag
 from views import (
     update_comment,
-    retrieve_comments,
+    retrieve_comment,
     retrieve_comments_by_post_id,
     post_comment,
     delete_comment
@@ -82,10 +82,14 @@ class JSONServer(HandleRequests):
         
         elif url["requested_resource"] == "comments":
             if url["pk"] != 0:
-                response_body = retrieve_comments_by_post_id(url["pk"])
+                response_body = retrieve_comment(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
             
-            response_body = retrieve_comments()
+                    # Get the request body JSON for the new data
+            content_len = int(self.headers.get("content-length", 0))
+            request_body = self.rfile.read(content_len)
+            request_body = json.loads(request_body)
+            response_body = retrieve_comments_by_post_id(request_body["post_id"])
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:

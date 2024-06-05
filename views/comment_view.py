@@ -37,7 +37,7 @@ def delete_comment(pk):
     return True if number_of_rows_deleted > 0 else False
 
 
-def retrieve_comments():
+def retrieve_comment(pk):
     # Open a connection to the database
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -52,20 +52,19 @@ def retrieve_comments():
             s.post_id,
             s.content
         FROM Comments s
+        WHERE s.id = ?
         """,
-            (),
+            (pk,),
         )
-        query_results = db_cursor.fetchall()
 
         # Convert each row to a dictionary and append to a list
-        comments_list = []
-        for row in query_results:
-            comments_list.append(dict(row))
+        query_results = db_cursor.fetchone()
 
         # Serialize Python list to JSON encoded string
-        serialized_comments = json.dumps(comments_list)
+        dictionary_version_of_object = dict(query_results)
+        serialized_comment = json.dumps(dictionary_version_of_object)
 
-    return serialized_comments
+    return serialized_comment
 
 def retrieve_comments_by_post_id(post_id):
     # Open a connection to the database

@@ -11,7 +11,7 @@ from .category_view import (
 from .post_tags_view import post_post_tag, get_one_post_tag
 from .comment_view import (
     update_comment,
-    retrieve_comments,
+    retrieve_comment,
     retrieve_comments_by_post_id,
     post_comment,
     delete_comment
