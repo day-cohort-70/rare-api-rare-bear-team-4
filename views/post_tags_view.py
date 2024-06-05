@@ -61,3 +61,24 @@ def get_one_post_tag(url):
     
     return json.dumps(post_tags)
 
+
+def get_all_post_tags():
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT 
+                pt.id,
+                pt.post_id,
+                pt.tag_id
+            FROM PostTags pt
+        """)
+
+        query_results = cursor.fetchall()
+
+        post_tags = []
+        for row in query_results:
+            post_tags.append(dict(row))
+
+    return json.dumps(post_tags)
