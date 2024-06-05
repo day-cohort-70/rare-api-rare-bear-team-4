@@ -22,6 +22,13 @@ from views import (
     post_categories,
 )
 from views import post_post_tag, get_one_post_tag, get_all_post_tags, delete_post_tag
+from views import (
+    update_comment,
+    retrieve_comment,
+    retrieve_comments_by_post_id,
+    post_comment,
+    delete_comment
+)
 
 
 class JSONServer(HandleRequests):
@@ -72,6 +79,18 @@ class JSONServer(HandleRequests):
             
             response_body = get_all_post_tags()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+        
+        elif url["requested_resource"] == "comments":
+            if url["pk"] != 0:
+                response_body = retrieve_comment(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+            
+                    # Get the request body JSON for the new data
+            content_len = int(self.headers.get("content-length", 0))
+            request_body = self.rfile.read(content_len)
+            request_body = json.loads(request_body)
+            response_body = retrieve_comments_by_post_id(request_body["post_id"])
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:
             return self.response(
@@ -114,6 +133,14 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "users":
             if pk != 0:
                 successfully_updated = update_user(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+                
+        elif url["requested_resource"] == "comments":
+            if pk != 0:
+                successfully_updated = update_comment(pk, request_body)
                 if successfully_updated:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
@@ -183,6 +210,18 @@ class JSONServer(HandleRequests):
             if success:
                 return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
             return self.response("Requested Resource not Found", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
+            
+        elif url["requested_resource"] == "comments":
+            if pk != 0:
+                successfully_deleted = delete_comment(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
 
     def do_POST(self):
         url = self.parse_url(self.path)
@@ -204,6 +243,13 @@ class JSONServer(HandleRequests):
                 )
         elif url["requested_resource"] == "tags":
             successfully_posted = make_tag(request_body["label"])
+            if successfully_posted:
+                return self.response(
+                    successfully_posted, status.HTTP_201_SUCCESS_CREATED.value
+                )
+            
+        elif url["requested_resource"] == "comments":
+            successfully_posted = post_comment(request_body)
             if successfully_posted:
                 return self.response(
                     successfully_posted, status.HTTP_201_SUCCESS_CREATED.value
