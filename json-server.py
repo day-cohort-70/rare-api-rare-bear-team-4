@@ -21,7 +21,7 @@ from views import (
     update_categories,
     post_categories,
 )
-from views import post_post_tag, get_one_post_tag, get_all_post_tags, delete_post_tag
+from views import post_post_tag, get_post_tags, delete_post_tag
 from views import (
     update_comment,
     retrieve_comment,
@@ -73,12 +73,8 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
         
         elif url["requested_resource"] == "post-tags":
-            if url["pk"] != 0:
-                response_body = get_one_post_tag(url)
+                response_body = get_post_tags(url)
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
-            
-            response_body = get_all_post_tags()
-            return self.response(response_body, status.HTTP_200_SUCCESS.value)
         
         elif url["requested_resource"] == "comments":
             if url["pk"] != 0:
