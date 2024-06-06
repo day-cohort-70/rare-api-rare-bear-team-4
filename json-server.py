@@ -123,7 +123,7 @@ class JSONServer(HandleRequests):
                 successfully_updated = update_tag(pk, request_body)
                 if successfully_updated:
                     return self.response(
-                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                        "", status.HTTP_200_SUCCESS.value
                     )
 
         elif url["requested_resource"] == "users":
