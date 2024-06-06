@@ -48,14 +48,16 @@ def retrieve_comment(pk):
         db_cursor.execute(
             """
         SELECT
-            s.id,
-            s.author_id,
-            s.post_id,
-            s.content, 
-            s.subject,
-            s.creation_date
-        FROM Comments s
-        WHERE s.id = ?
+            c.id,
+            c.author_id,
+            c.post_id,
+            c.content,
+            c.subject,
+            c.creation_date,
+            u.username
+        FROM Comments c 
+        INNER JOIN Users u ON c.author_id = u.id
+        WHERE c.id = ?
         """,
             (pk,),
         )
@@ -79,14 +81,17 @@ def retrieve_comments_by_post_id(post_id):
         db_cursor.execute(
             """
         SELECT
-            p.id,
-            p.author_id,
-            p.post_id,
-            p.content,
-            p.subject,
-            p.creation_date
-        FROM Comments p
-        WHERE p.post_id = ?
+            c.id,
+            c.author_id,
+            c.post_id,
+            c.content,
+            c.subject,
+            c.creation_date,
+            u.username
+        FROM Comments c 
+        INNER JOIN Users u ON c.author_id = u.id
+        WHERE c.post_id = ?
+        ORDER BY c.creation_date DESC;
         """,
             (post_id,),
         )
