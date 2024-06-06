@@ -1,3 +1,5 @@
+
+
 CREATE TABLE "Users" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "first_name" varchar,
@@ -42,11 +44,14 @@ CREATE TABLE "Posts" (
   FOREIGN KEY(`user_id`) REFERENCES `Users`(`id`)
 );
 
+DROP TABLE IF EXISTS "Comments";
 CREATE TABLE "Comments" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "post_id" INTEGER,
   "author_id" INTEGER,
   "content" varchar,
+  "subject" varchar,
+  "creation_date" date,
   FOREIGN KEY(`post_id`) REFERENCES `Posts`(`id`),
   FOREIGN KEY(`author_id`) REFERENCES `Users`(`id`)
 );
@@ -86,7 +91,17 @@ CREATE TABLE "Categories" (
 );
 
 INSERT INTO Categories ('label') VALUES ('News');
-INSERT INTO Comments ('author_id', 'post_id', 'content') VALUES ('1', '1', 'potato');
+INSERT INTO Comments ('author_id', 'post_id', 'content', 'subject', 'creation_date') 
+VALUES ('1', '1', 'Content for comment 1', 'Subject for comment 1', '2024-05-01');
+INSERT INTO Comments ('author_id', 'post_id', 'content', 'subject', 'creation_date') 
+VALUES ('2', '1', 'Content for comment 2', 'Subject for comment 2', '2024-05-02');
+INSERT INTO Comments ('author_id', 'post_id', 'content', 'subject', 'creation_date') 
+VALUES ('2', '2', 'Content for comment 3', 'Subject for comment 3', '2024-05-03');
+INSERT INTO Comments ('author_id', 'post_id', 'content', 'subject', 'creation_date') 
+VALUES ('1', '2', 'Content for comment 4', 'Subject for comment 4', '2024-05-04');
+INSERT INTO Comments ('author_id', 'post_id', 'content', 'subject', 'creation_date') 
+VALUES ('2', '1', 'Content for comment 5', 'Subject for comment 5', '2024-05-05');
+
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 INSERT INTO "Users" 

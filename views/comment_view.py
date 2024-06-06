@@ -9,10 +9,11 @@ def update_comment(id, comment_data):
         db_cursor.execute(
             """
             UPDATE Comments
-            SET content =?
+            SET content =?,
+            subject =?
             WHERE id =?
             """,
-            (comment_data["content"], id),
+            (comment_data["content"], comment_data["subject"], id),
         )
 
         rows_affected = db_cursor.rowcount
@@ -47,12 +48,16 @@ def retrieve_comment(pk):
         db_cursor.execute(
             """
         SELECT
-            s.id,
-            s.author_id,
-            s.post_id,
-            s.content
-        FROM Comments s
-        WHERE s.id = ?
+            c.id,
+            c.author_id,
+            c.post_id,
+            c.content,
+            c.subject,
+            c.creation_date,
+            u.username
+        FROM Comments c 
+        INNER JOIN Users u ON c.author_id = u.id
+        WHERE c.id = ?
         """,
             (pk,),
         )
@@ -76,12 +81,17 @@ def retrieve_comments_by_post_id(post_id):
         db_cursor.execute(
             """
         SELECT
-            p.id,
-            p.author_id,
-            p.post_id,
-            p.content
-        FROM Comments p
-        WHERE p.post_id = ?
+            c.id,
+            c.author_id,
+            c.post_id,
+            c.content,
+            c.subject,
+            c.creation_date,
+            u.username
+        FROM Comments c 
+        INNER JOIN Users u ON c.author_id = u.id
+        WHERE c.post_id = ?
+        ORDER BY c.creation_date DESC;
         """,
             (post_id,),
         )
@@ -105,9 +115,10 @@ def post_comment(comment_data):
         db_cursor.execute(
             """
             INSERT INTO Comments
-            (author_id, post_id, content) VALUES(?, ?, ?)
+            (author_id, post_id, content, subject, creation_date) 
+            VALUES(?, ?, ?, ?, ?)
             """,
-            (comment_data["author_id"], comment_data["post_id"], comment_data["content"]),
+            (comment_data["author_id"], comment_data["post_id"], comment_data["content"], comment_data["subject"], comment_data["creation_date"]),
         )
         new_comment_id = db_cursor.lastrowid
 
@@ -117,5 +128,7 @@ def post_comment(comment_data):
         'id': new_comment_id,
         'author_id': comment_data["author_id"],
         'post_id': comment_data["post_id"],
-        'content': comment_data["content"]
+        'content': comment_data["content"],
+        'subject': comment_data["subject"],
+        'creation_date': comment_data["creation_date"]
         })
