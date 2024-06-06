@@ -9,10 +9,11 @@ def update_comment(id, comment_data):
         db_cursor.execute(
             """
             UPDATE Comments
-            SET content =?
+            SET content =?,
+            subject =?
             WHERE id =?
             """,
-            (comment_data["content"], id),
+            (comment_data["content"], comment_data["subject"], id),
         )
 
         rows_affected = db_cursor.rowcount
@@ -50,7 +51,9 @@ def retrieve_comment(pk):
             s.id,
             s.author_id,
             s.post_id,
-            s.content
+            s.content, 
+            s.subject,
+            s.creation_date
         FROM Comments s
         WHERE s.id = ?
         """,
@@ -79,7 +82,9 @@ def retrieve_comments_by_post_id(post_id):
             p.id,
             p.author_id,
             p.post_id,
-            p.content
+            p.content,
+            p.subject,
+            p.creation_date
         FROM Comments p
         WHERE p.post_id = ?
         """,

@@ -40,10 +40,11 @@ class JSONServer(HandleRequests):
         response_body = ""
         url = self.parse_url(self.path)
 
+        #This path is for posts/[post_id_here]/comments which will load all the comments of the post.
         if (("/comments" in self.path) & (url["requested_resource"] == "posts")):
             # Extract postId from the path
-            postid = self.path.split("/")[2]  # Adjust index based on your URL structure
-            response_body = retrieve_comments_by_post_id(postid)
+            #postid = self.path.split("/")[2]  # This finds the post ID in the URL
+            response_body = retrieve_comments_by_post_id(url["pk"])
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         if url["requested_resource"] == "tags":
