@@ -109,7 +109,6 @@ def delete_post(pk):
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
-        # Write the SQL query to get the information you want
         db_cursor.execute(
             """
         DELETE FROM Posts WHERE id = ?

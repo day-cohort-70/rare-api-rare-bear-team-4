@@ -41,9 +41,7 @@ class JSONServer(HandleRequests):
         url = self.parse_url(self.path)
 
         #This path is for posts/[post_id_here]/comments which will load all the comments of the post.
-        if (("/comments" in self.path) & (url["requested_resource"] == "posts")):
-            # Extract postId from the path
-            #postid = self.path.split("/")[2]  # This finds the post ID in the URL
+        if ((url["requested_resource"] == "posts") & ("/comments" in self.path)):
             response_body = retrieve_comments_by_post_id(url["pk"])
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
@@ -87,13 +85,6 @@ class JSONServer(HandleRequests):
             if url["pk"] != 0:
                 response_body = retrieve_comment(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
-            
-                    # Get the request body JSON for the new data
-            content_len = int(self.headers.get("content-length", 0))
-            request_body = self.rfile.read(content_len)
-            request_body = json.loads(request_body)
-            response_body = retrieve_comments_by_post_id(request_body["post_id"])
-            return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:
             return self.response(
@@ -261,7 +252,7 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "posts":
             new_post_id = post_post(request_body)
             if new_post_id is not None:
-                # Return the new ship's ID in the response
+                # Return the new post's ID in the response
                 response_body = json.dumps({"new_post_id": new_post_id})
                 return self.response(
                     response_body, status.HTTP_201_SUCCESS_CREATED.value
