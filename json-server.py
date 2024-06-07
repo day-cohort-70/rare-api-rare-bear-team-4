@@ -266,7 +266,7 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "post-tags":
             success = post_post_tag(request_body)
             if success:
-                return self.response("", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value)
+                return self.response(success, status.HTTP_201_SUCCESS_CREATED.value)
 
           
         else:

@@ -17,10 +17,15 @@ def post_post_tag(post_data):
                 post_data["tagId"],
             ),
         )
-
-        number_of_rows_added = db_cursor.rowcount
+        new_post_tags_id = db_cursor.lastrowid
     
-    return True if number_of_rows_added > 0 else False
+    conn.commit()
+    ## Select and return using cursor.lastrow
+    return json.dumps({
+            'id': new_post_tags_id,
+            'post_id': post_data["postId"],
+            'tag_id': post_data["tagId"]
+        })
 
 
 def get_post_tags(url):
