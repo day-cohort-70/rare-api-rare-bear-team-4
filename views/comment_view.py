@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 
-def update_comment(id, comment_data):
+def update_comment(pk, comment_data):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
 
@@ -13,7 +13,7 @@ def update_comment(id, comment_data):
             subject =?
             WHERE id =?
             """,
-            (comment_data["content"], comment_data["subject"], id),
+            (comment_data["content"], comment_data["subject"], pk),
         )
 
         rows_affected = db_cursor.rowcount

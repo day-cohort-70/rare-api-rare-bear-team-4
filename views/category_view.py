@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 
-def update_categories(id, Categories_data):
+def update_categories(pk, Categories_data):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
 
@@ -12,7 +12,7 @@ def update_categories(id, Categories_data):
             SET label =?
             WHERE id =?
             """,
-            (Categories_data["label"], id),
+            (Categories_data["label"], pk),
         )
 
         rows_affected = db_cursor.rowcount
